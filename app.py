@@ -7,16 +7,19 @@ from security import authentication,identity
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 import datetime
+from flask_sqlalchemy import SQLAlchemy
+from models import User
 
 
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(days=10)
 app.secret_key = 'mahmoud'
 jwt = JWT(app,authentication,identity)
+db = SQLAlchemy(app)
 
 #------------------------------------------------------------------
 
@@ -199,21 +202,9 @@ def remove():
 
 
 
-#if __name__ == '__main__':                                        #If condition to run the app only from the main .
-#    app.run(port=5000, debug=True)
+if __name__ == '__main__':                                        #If condition to run the app only from the main .
+    app.run(port=5000, debug=True)
 
-
-
-if __name__ == '__main__':
-    from db import db
-    db.init_app(app)
-
-    if app.config['DEBUG']:
-        @app.before_first_request
-        def create_tables():
-            db.create_all()
-
-    app.run(port=5000)
 
 
 

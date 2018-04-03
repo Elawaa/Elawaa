@@ -3,6 +3,6 @@ Flask-RESTful
 Flask-JWT
 Flask-SQLAlchemy
 SQLAlchemy
-SQLAlchemy.orm
+SQLAlchemy.ORM
 uwsgi
 psycopg2

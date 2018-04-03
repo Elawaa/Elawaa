@@ -8,14 +8,20 @@ from flask_jwt import JWT, jwt_required, current_identity
 #from werkzeug.security import safe_str_cmp
 from sqlalchemy import create_engine,MetaData, Table
 import datetime
-from db import db
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import update
+from flask_sqlalchemy import SQLAlchemy
 
 
+
+
+
+
+
+app = Flask(__name__)
+db = SQLAlchemy(app)
 DBSession = scoped_session(sessionmaker())
 query = DBSession.query_property()
-app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(days=10)
@@ -301,13 +307,10 @@ def remove(cls):
 #    app.run(port=5000, debug=True)
 
 if __name__ == '__main__':
-    from db import db
     db.init_app(app)
-
     if app.config['DEBUG']:
         @app.before_first_request
         def create_tables():
             db.create_all()
-
     app.run(port=5000)
 
